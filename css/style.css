@@ -298,6 +298,90 @@ main {
     display: none;
 }
 
+/* ===== 答题计时条 ===== */
+#timer-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    overflow: visible;
+    position: relative;
+}
+
+#timer-bar-fill {
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.timer-phase-1 {
+    background: linear-gradient(90deg, #00b894, #55efc4);
+    box-shadow: 0 0 6px rgba(0, 184, 148, 0.5);
+}
+
+.timer-phase-2 {
+    background: linear-gradient(90deg, #fdcb6e, #f39c12);
+    box-shadow: 0 0 6px rgba(243, 156, 18, 0.5);
+}
+
+.timer-phase-3 {
+    background: linear-gradient(90deg, #e17055, #fd79a8);
+    box-shadow: 0 0 6px rgba(225, 112, 85, 0.5);
+}
+
+.timer-phase-4 {
+    background: linear-gradient(90deg, #d63031, #e74c3c);
+    box-shadow: 0 0 6px rgba(214, 48, 49, 0.5);
+    animation: timer-blink 0.5s ease-in-out infinite;
+}
+
+@keyframes timer-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* 速度标签 */
+#timer-speed-label {
+    position: absolute;
+    right: 0;
+    top: -20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+}
+
+#timer-speed-label:empty {
+    display: none;
+}
+
+#timer-speed-label.speed-excellent { color: #55efc4; }
+#timer-speed-label.speed-great { color: #ffeaa7; }
+#timer-speed-label.speed-good { color: #fab1a0; }
+#timer-speed-label.speed-bad { color: #ff7675; }
+
+.speed-label {
+    animation: speed-appear 0.3s ease-out;
+}
+
+@keyframes speed-appear {
+    0% { transform: scale(0.5) translateY(4px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* 反馈弹窗中的速度评价 */
+.feedback-speed {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.feedback-speed.speed-excellent { color: #00b894; }
+.feedback-speed.speed-great { color: #f39c12; }
+.feedback-speed.speed-good { color: #e17055; }
+.feedback-speed.speed-bad { color: #d63031; }
+
 #question-container {
     background: #636e72;
     border-radius: 8px;
@@ -855,6 +939,21 @@ main {
         padding: 8px 12px;
     }
 
+    #timer-bar {
+        height: 8px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+    }
+
+    #timer-speed-label {
+        font-size: 10px;
+        top: -16px;
+    }
+
+    .feedback-speed {
+        font-size: 1.1rem;
+    }
+
     #question-container {
         padding: 6px;
         margin-bottom: 8px;
@@ -1016,6 +1115,17 @@ main {
 
     .pet-hp-bar::after, .monster-hp-bar::after, .pet-xp-bar::after {
         display: none;
+    }
+
+    #timer-bar {
+        height: 5px;
+        border-radius: 3px;
+        margin-bottom: 3px;
+    }
+
+    #timer-speed-label {
+        font-size: 8px;
+        top: -13px;
     }
 
     #question-text {

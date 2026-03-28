@@ -34,7 +34,7 @@ export function playAttackEffect() {
 /**
  * 显示答题反馈弹窗
  */
-export function showFeedback(isCorrect, correctAnswer) {
+export function showFeedback(isCorrect, correctAnswer, speedTier) {
     const overlay = document.createElement('div');
     overlay.className = `feedback-overlay ${isCorrect ? 'correct-feedback' : 'wrong-feedback'}`;
 
@@ -42,6 +42,9 @@ export function showFeedback(isCorrect, correctAnswer) {
     if (isCorrect) {
         html += '<span class="feedback-emoji">🎉</span>';
         html += '<span class="feedback-text">回答正确！</span>';
+        if (speedTier) {
+            html += `<div class="feedback-speed ${speedTier.cls}">${speedTier.emoji} ${speedTier.label}</div>`;
+        }
     } else {
         html += '<span class="feedback-emoji">😢</span>';
         html += '<span class="feedback-text">答错啦～</span>';
