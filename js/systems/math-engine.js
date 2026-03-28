@@ -1,7 +1,17 @@
 /**
  * 数学题引擎 — 10以内加减法
+ *
+ * 设计目标：
+ * - 每场战斗简单题和难题交替出现
+ * - 避免大量出现 +1/-1 类过于简单的题目
+ * - boss战（道馆馆主、四大天王、冠军）显著更难
+ * - 高关卡减法题比例增加
  */
-import { DIFFICULTY_WEIGHTS, DIFFICULTY_RANGES } from '../config/constants.js';
+import {
+    DIFFICULTY_WEIGHTS,
+    BOSS_DIFFICULTY_WEIGHTS,
+    DIFFICULTY_RANGES
+} from '../config/constants.js';
 
 function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -16,37 +26,49 @@ function shuffle(arr) {
     return a;
 }
 
-/**
- * 根据关卡确定基础难度等级(1-3)
- */
-function calcDifficulty(level, subLevel) {
-    let d;
-    if (level <= 2) d = 1;
-    else if (level <= 5) d = 2;
-    else d = 3;
-    if (subLevel === 5) d = Math.min(3, d + 1);
-    return d;
-}
+// 最近出过的题目，用于防止连续重复
+let recentQuestions = [];
+const MAX_RECENT = 4;
 
 /**
  * 生成加法题
  */
-function makeAddition(maxSum) {
+function makeAddition(range) {
+    const { minAddend, maxAddition } = range;
     let a, b;
+    let attempts = 0;
     do {
-        a = randInt(1, Math.min(10, maxSum));
-        b = randInt(1, Math.min(10, maxSum));
-    } while (a + b > maxSum);
-    return { type: 'addition', answer: a + b, display: `${a} + ${b} = ?` };
+        a = randInt(minAddend, maxAddition - minAddend);
+        b = randInt(minAddend, maxAddition - a);
+        attempts++;
+    } while ((a + b > maxAddition || a + b < minAddend * 2) && attempts < 20);
+
+    // 确保不超范围
+    if (a + b > maxAddition) {
+        a = randInt(minAddend, Math.floor(maxAddition / 2));
+        b = randInt(minAddend, maxAddition - a);
+    }
+
+    return { type: 'addition', a, b, answer: a + b, display: `${a} + ${b} = ?` };
 }
 
 /**
  * 生成减法题
  */
-function makeSubtraction(maxMinuend) {
-    const x = randInt(2, maxMinuend);
-    const y = randInt(1, x - 1);
-    return { type: 'subtraction', answer: x - y, display: `${x} - ${y} = ?` };
+function makeSubtraction(range) {
+    const { minMinuend, maxMinuend, minSubtrahend } = range;
+    const x = randInt(minMinuend, maxMinuend);
+    const maxY = Math.max(minSubtrahend, x - 1);
+    const y = randInt(minSubtrahend, maxY);
+
+    return { type: 'subtraction', a: x, b: y, answer: x - y, display: `${x} - ${y} = ?` };
+}
+
+/**
+ * 检查题目是否和最近的重复
+ */
+function isDuplicate(q) {
+    return recentQuestions.some(r => r.display === q.display);
 }
 
 /**
@@ -54,24 +76,42 @@ function makeSubtraction(maxMinuend) {
  */
 function makeOptions(correct) {
     const opts = [correct];
-    while (opts.length < 3) {
-        const offset = randInt(1, 3);
+    let attempts = 0;
+    while (opts.length < 3 && attempts < 30) {
+        // 干扰项偏移1-4，比之前更大范围
+        const offset = randInt(1, 4);
         const wrong = Math.random() < 0.5 ? correct + offset : correct - offset;
-        if (wrong >= 1 && wrong <= 10 && !opts.includes(wrong)) {
+        if (wrong >= 0 && wrong <= 12 && !opts.includes(wrong)) {
             opts.push(wrong);
         }
+        attempts++;
+    }
+    // 保底填充
+    while (opts.length < 3) {
+        const filler = randInt(0, 10);
+        if (!opts.includes(filler)) opts.push(filler);
     }
     return shuffle(opts);
 }
 
 /**
  * 生成一道题目
- * @param {number} level  - 大关卡 1-9
- * @param {number} subLevel - 子关卡 1-5
+ * @param {number} level     - 大关卡 1-9
+ * @param {number} subLevel  - 子关卡 1-5
+ * @param {string} [encounterType] - 遭遇类型：'normal','gymLeader','eliteFour','champion'
  * @returns {{ display: string, answer: number, options: number[] }}
  */
-export function generateQuestion(level, subLevel) {
-    const weights = DIFFICULTY_WEIGHTS[level] || DIFFICULTY_WEIGHTS[1];
+export function generateQuestion(level, subLevel, encounterType) {
+    // 根据遭遇类型选择权重表
+    const isBoss = encounterType === 'gymLeader'
+        || encounterType === 'eliteFour'
+        || encounterType === 'champion'
+        || subLevel === 5;
+
+    const weightTable = isBoss ? BOSS_DIFFICULTY_WEIGHTS : DIFFICULTY_WEIGHTS;
+    const weights = weightTable[level] || weightTable[1];
+
+    // 按权重随机选择难度
     const rand = Math.random();
     let selectedDiff;
     if (rand < weights[0]) selectedDiff = 1;
@@ -79,15 +119,32 @@ export function generateQuestion(level, subLevel) {
     else selectedDiff = 3;
 
     const range = DIFFICULTY_RANGES[selectedDiff];
-    let q = null;
 
-    if (range.hasSubtraction && Math.random() < 0.4) {
-        q = makeSubtraction(range.maxSubtraction);
-    }
-    if (!q) {
-        q = makeAddition(range.maxAddition);
+    // 生成题目，避免重复
+    let q = null;
+    let tries = 0;
+    do {
+        if (range.hasSubtraction && Math.random() < range.subChance) {
+            q = makeSubtraction(range);
+        } else {
+            q = makeAddition(range);
+        }
+        tries++;
+    } while (isDuplicate(q) && tries < 10);
+
+    // 记录最近的题目
+    recentQuestions.push(q);
+    if (recentQuestions.length > MAX_RECENT) {
+        recentQuestions.shift();
     }
 
     q.options = makeOptions(q.answer);
     return q;
+}
+
+/**
+ * 重置出题记录（新战斗开始时调用）
+ */
+export function resetQuestionHistory() {
+    recentQuestions = [];
 }

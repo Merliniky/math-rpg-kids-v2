@@ -1,7 +1,7 @@
 /**
  * 游戏常量配置
  */
-export const VERSION = '0.38.1';
+export const VERSION = '0.39.1';
 
 // 游戏状态
 export const GameState = Object.freeze({
@@ -58,22 +58,72 @@ export const TRAINER_NAMES = [
     '背包客', '登山男', '自行车手', '超能力者'
 ];
 
-// 数学题难度权重 [简单, 中等, 困难]
+/**
+ * 数学题难度配置（重新设计）
+ *
+ * 每个关卡有3个难度池的权重 [简单, 中等, 困难]
+ * boss战(subLevel=5) 会额外提升难度
+ */
+
+// 普通战斗的难度权重 [简单, 中等, 困难]
 export const DIFFICULTY_WEIGHTS = Object.freeze({
-    1: [0.8, 0.2, 0.0],
-    2: [0.7, 0.3, 0.0],
-    3: [0.5, 0.4, 0.1],
-    4: [0.4, 0.4, 0.2],
-    5: [0.3, 0.4, 0.3],
-    6: [0.2, 0.4, 0.4],
-    7: [0.1, 0.4, 0.5],
-    8: [0.1, 0.3, 0.6],
-    9: [0.0, 0.2, 0.8]
+    1: [0.45, 0.40, 0.15],
+    2: [0.35, 0.40, 0.25],
+    3: [0.25, 0.40, 0.35],
+    4: [0.20, 0.40, 0.40],
+    5: [0.15, 0.35, 0.50],
+    6: [0.10, 0.35, 0.55],
+    7: [0.05, 0.30, 0.65],
+    8: [0.05, 0.25, 0.70],
+    9: [0.00, 0.20, 0.80]
 });
 
-// 难度范围配置
+// boss战的难度权重（道馆馆主 subLevel=5）
+export const BOSS_DIFFICULTY_WEIGHTS = Object.freeze({
+    1: [0.20, 0.45, 0.35],
+    2: [0.15, 0.40, 0.45],
+    3: [0.10, 0.35, 0.55],
+    4: [0.05, 0.30, 0.65],
+    5: [0.05, 0.25, 0.70],
+    6: [0.00, 0.25, 0.75],
+    7: [0.00, 0.20, 0.80],
+    8: [0.00, 0.15, 0.85],
+    9: [0.00, 0.10, 0.90]
+});
+
+/**
+ * 难度范围配置
+ *
+ * 简单: 加法和≤8，可选简单减法（被减数≤6），操作数≥1
+ * 中等: 加法和≤10，减法被减数≤9，操作数≥2（避免+1/-1）
+ * 困难: 加法和≤10 且操作数≥2，减法被减数≤10 且操作数≥2
+ */
 export const DIFFICULTY_RANGES = Object.freeze({
-    1: { maxAddition: 5, maxSubtraction: 0, hasSubtraction: false },
-    2: { maxAddition: 8, maxSubtraction: 5, hasSubtraction: true },
-    3: { maxAddition: 10, maxSubtraction: 10, hasSubtraction: true }
+    1: {
+        minAddend: 1,
+        maxAddition: 8,
+        hasSubtraction: true,
+        subChance: 0.2,
+        minMinuend: 3,
+        maxMinuend: 6,
+        minSubtrahend: 1
+    },
+    2: {
+        minAddend: 2,
+        maxAddition: 10,
+        hasSubtraction: true,
+        subChance: 0.45,
+        minMinuend: 5,
+        maxMinuend: 9,
+        minSubtrahend: 2
+    },
+    3: {
+        minAddend: 2,
+        maxAddition: 10,
+        hasSubtraction: true,
+        subChance: 0.55,
+        minMinuend: 6,
+        maxMinuend: 10,
+        minSubtrahend: 2
+    }
 });

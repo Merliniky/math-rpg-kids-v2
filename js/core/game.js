@@ -6,7 +6,7 @@ import { GymData, EliteFourData } from '../config/pokemon-data.js';
 import { EventBus, GameStore } from './state.js';
 import { createPet, addXP, usePotion as usePotionSystem, recoverFromDefeat } from '../systems/pet.js';
 import { createEncounter, dealDamage } from '../systems/battle.js';
-import { generateQuestion } from '../systems/math-engine.js';
+import { generateQuestion, resetQuestionHistory } from '../systems/math-engine.js';
 import * as R from '../ui/renderer.js';
 import { playAttackEffect, showFeedback } from '../ui/effects.js';
 
@@ -95,6 +95,7 @@ export class Game {
     startBattle() {
         this.store.set('gameState', GameState.BATTLE);
         this.store.set('battlePhase', BattlePhase.WAITING_ANSWER);
+        resetQuestionHistory();
         R.show(this.el.mathBoard);
         R.hide(this.el.exploreHint);
         R.renderEnemy(this.store.get('enemy'));
@@ -104,7 +105,8 @@ export class Game {
     nextQuestion() {
         const level = this.store.get('level');
         const subLevel = this.store.get('subLevel');
-        const q = generateQuestion(level, subLevel);
+        const encounterType = this.store.get('encounterType');
+        const q = generateQuestion(level, subLevel, encounterType);
         this.store.set('question', q);
         R.renderQuestion(q);
         this.store.set('battlePhase', BattlePhase.WAITING_ANSWER);
