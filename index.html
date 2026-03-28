@@ -7,57 +7,68 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- 竖屏提示遮罩 -->
+    <div id="rotate-overlay">
+        <div class="rotate-content">
+            <div class="rotate-icon">📱</div>
+            <div class="rotate-arrow">↻</div>
+            <div class="rotate-text">请将设备横屏使用</div>
+            <div class="rotate-subtext">本游戏仅支持横屏模式</div>
+        </div>
+    </div>
+
     <div id="game-container">
         <header>
             <h1>数理小精灵：十之秘境</h1>
-            <div id="version-display">v0.38.1</div>
             <div id="level-display" class="level-display">第1关 尼比道馆</div>
+            <div id="version-display">v0.39.0</div>
         </header>
 
         <main>
-            <div id="battle-area">
-                <div id="player-pet">
-                    <div class="pet-sprite">
-                        <div class="pet-level">Lv.<span id="player-level">1</span></div>
-                        <div class="pet-image" id="player-pet-image">🔥</div>
-                        <div class="pet-name" id="player-pet-name">小火龙</div>
-                        <div class="pet-hp-bar"><div class="hp-fill" id="player-hp-fill"></div></div>
-                        <div class="pet-xp-bar"><div class="xp-fill" id="player-xp-fill"></div></div>
+            <div id="player-pet" class="battle-column">
+                <div class="pet-sprite">
+                    <div class="pet-level">Lv.<span id="player-level">1</span></div>
+                    <div class="pet-image" id="player-pet-image">🔥</div>
+                    <div class="pet-name" id="player-pet-name">小火龙</div>
+                    <div class="pet-hp-bar"><div class="hp-fill" id="player-hp-fill"></div></div>
+                    <div class="pet-xp-bar"><div class="xp-fill" id="player-xp-fill"></div></div>
+                </div>
+            </div>
+
+            <div id="center-panel">
+                <div id="math-board" class="hidden">
+                    <div id="question-container">
+                        <span id="question-text">准备战斗！</span>
+                    </div>
+                    <div id="answer-buttons">
+                        <button class="answer-btn" data-answer="0">?</button>
+                        <button class="answer-btn" data-answer="0">?</button>
+                        <button class="answer-btn" data-answer="0">?</button>
                     </div>
                 </div>
-                <div id="enemy-monster">
-                    <div class="monster-sprite">
-                        <div class="trainer-name" id="trainer-name"></div>
-                        <div class="monster-name" id="monster-name"></div>
-                        <div class="monster-image" id="enemy-monster-image"></div>
-                        <div class="monster-hp-bar"><div class="hp-fill" id="enemy-hp-fill"></div></div>
+
+                <div id="explore-hint" class="explore-hint">
+                    <div class="hint-content">
+                        <span class="hint-icon">⚔️</span>
+                        <span class="hint-text">点击"探索"按钮开始冒险！</span>
+                        <span class="hint-subtext">第1关 尼比道馆 (1/5)</span>
                     </div>
                 </div>
-            </div>
 
-            <div id="math-board" class="hidden">
-                <div id="question-container">
-                    <span id="question-text">准备战斗！</span>
-                </div>
-                <div id="answer-buttons">
-                    <button class="answer-btn" data-answer="0">?</button>
-                    <button class="answer-btn" data-answer="0">?</button>
-                    <button class="answer-btn" data-answer="0">?</button>
+                <div id="game-controls">
+                    <button id="explore-btn">探索</button>
+                    <button id="potion-btn">恢复药水</button>
+                    <button id="stats-btn">查看状态</button>
                 </div>
             </div>
 
-            <div id="explore-hint" class="explore-hint">
-                <div class="hint-content">
-                    <span class="hint-icon">⚔️</span>
-                    <span class="hint-text">点击"探索"按钮开始冒险！</span>
-                    <span class="hint-subtext">第1关 尼比道馆 (1/5)</span>
+            <div id="enemy-monster" class="battle-column">
+                <div class="monster-sprite">
+                    <div class="trainer-name" id="trainer-name"></div>
+                    <div class="monster-name" id="monster-name"></div>
+                    <div class="monster-image" id="enemy-monster-image"></div>
+                    <div class="monster-hp-bar"><div class="hp-fill" id="enemy-hp-fill"></div></div>
                 </div>
-            </div>
-
-            <div id="game-controls">
-                <button id="explore-btn">探索</button>
-                <button id="potion-btn">恢复药水</button>
-                <button id="stats-btn">查看状态</button>
             </div>
         </main>
 

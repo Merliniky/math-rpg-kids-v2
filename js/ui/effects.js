@@ -16,7 +16,7 @@ export function playAttackEffect() {
     sprite.appendChild(flash);
     setTimeout(() => flash.remove(), 500);
 
-    const area = document.getElementById('battle-area');
+    const area = document.querySelector('main');
     for (let i = 0; i < 5; i++) {
         setTimeout(() => {
             const star = document.createElement('div');
