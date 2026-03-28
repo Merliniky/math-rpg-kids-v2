@@ -86,6 +86,7 @@ export function getPetDisplay(pet) {
     const info = PetData[pet.type];
     return {
         name: pet.evolved ? info.evolutionName : info.name,
-        emoji: pet.evolved ? info.evolvedEmoji : info.emoji
+        emoji: pet.evolved ? info.evolvedEmoji : info.emoji,
+        spriteId: pet.evolved ? info.evolvedSpriteId : info.spriteId
     };
 }

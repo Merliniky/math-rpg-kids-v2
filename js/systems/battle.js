@@ -38,6 +38,7 @@ function createTrainerEncounter(level) {
         attack: Math.floor(pokemon.attack * mult),
         xp: Math.floor(BATTLE_REWARDS.TRAINER_BASE_XP * mult),
         emoji: pokemon.emoji,
+        spriteId: pokemon.spriteId,
         type: pokemon.type,
         encounterType: 'trainer'
     };
@@ -57,6 +58,7 @@ function createGymLeaderEncounter(level) {
         attack: Math.floor(pokemon.attack * mult * ENEMY_SCALING.GYM_ATTACK_BONUS),
         xp: Math.floor(BATTLE_REWARDS.GYM_LEADER_BASE_XP * mult),
         emoji: pokemon.emoji,
+        spriteId: pokemon.spriteId,
         type: pokemon.type,
         encounterType: 'gymLeader',
         gymType: gym.type,
@@ -79,6 +81,7 @@ function createEliteFourEncounter(subLevel) {
         attack: Math.floor(pokemon.attack * mult * ENEMY_SCALING.ELITE_ATTACK_BONUS),
         xp: Math.floor(BATTLE_REWARDS.ELITE_FOUR_BASE_XP * mult),
         emoji: pokemon.emoji,
+        spriteId: pokemon.spriteId,
         type: pokemon.type,
         encounterType: 'eliteFour',
         eliteName: elite.name,
@@ -99,6 +102,7 @@ function createChampionEncounter() {
         attack: pokemon.attack,
         xp: BATTLE_REWARDS.CHAMPION_XP,
         emoji: pokemon.emoji,
+        spriteId: pokemon.spriteId,
         type: pokemon.type,
         encounterType: 'champion'
     };

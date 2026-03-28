@@ -2,6 +2,31 @@
  * DOM 渲染器 — 所有 UI 更新集中在此
  */
 import { getPetDisplay } from '../systems/pet.js';
+import { spriteUrl } from '../config/pokemon-data.js';
+
+/**
+ * 设置精灵图：优先用 <img>，加载失败回退到 emoji
+ */
+function setSpriteImage(container, spriteId, fallbackEmoji) {
+    if (spriteId) {
+        const url = spriteUrl(spriteId);
+        // 复用已有的 img 或新建
+        let img = container.querySelector('img');
+        if (!img) {
+            container.textContent = '';
+            img = document.createElement('img');
+            img.className = 'sprite-img';
+            img.alt = '';
+            img.onerror = () => { container.textContent = fallbackEmoji; img.remove(); };
+            container.appendChild(img);
+        }
+        img.src = url;
+    } else {
+        const img = container.querySelector('img');
+        if (img) img.remove();
+        container.textContent = fallbackEmoji;
+    }
+}
 
 // 缓存所有 DOM 元素
 let el = {};
@@ -58,7 +83,7 @@ export function renderPet(pet) {
     el.playerLevel.textContent = pet.level;
     el.playerHPFill.style.width = `${(pet.hp / pet.maxHP) * 100}%`;
     el.playerXPFill.style.width = `${(pet.xp / pet.xpToNext) * 100}%`;
-    el.playerPetImage.textContent = display.emoji;
+    setSpriteImage(el.playerPetImage, display.spriteId, display.emoji);
     el.playerPetName.textContent = display.name;
 }
 
@@ -75,11 +100,13 @@ export function renderEnemy(enemy) {
         el.trainerName.style.display = 'none';
     }
     el.monsterName.textContent = enemy.name;
-    el.enemyMonsterImage.textContent = enemy.emoji || '❓';
+    setSpriteImage(el.enemyMonsterImage, enemy.spriteId, enemy.emoji || '❓');
 }
 
 export function clearEnemy() {
     el.monsterName.textContent = '';
+    const img = el.enemyMonsterImage.querySelector('img');
+    if (img) img.remove();
     el.enemyMonsterImage.textContent = '';
     el.trainerName.textContent = '';
 }
