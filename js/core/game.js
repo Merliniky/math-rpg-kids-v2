@@ -8,7 +8,7 @@ import { createPet, addXP, usePotion as usePotionSystem, recoverFromDefeat } fro
 import { createEncounter, dealDamage } from '../systems/battle.js';
 import { generateQuestion, resetQuestionHistory } from '../systems/math-engine.js';
 import * as R from '../ui/renderer.js';
-import { playAttackEffect, showFeedback, startTimer, stopTimer } from '../ui/effects.js';
+import { playAttackEffect, showFeedback } from '../ui/effects.js';
 
 export class Game {
     constructor() {
@@ -110,7 +110,6 @@ export class Game {
         this.store.set('question', q);
         R.renderQuestion(q);
         this.store.set('battlePhase', BattlePhase.WAITING_ANSWER);
-        startTimer();
     }
 
     submitAnswer(btn) {
@@ -118,21 +117,20 @@ export class Game {
         this.store.set('battlePhase', BattlePhase.ANIMATING);
         R.disableAnswerButtons();
 
-        const { tier } = stopTimer();
         const question = this.store.get('question');
         const userAnswer = parseInt(btn.dataset.answer);
         const isCorrect = userAnswer === question.answer;
 
         if (isCorrect) {
-            this.handleCorrect(btn, tier);
+            this.handleCorrect(btn);
         } else {
             this.handleWrong(btn);
         }
     }
 
-    handleCorrect(btn, speedTier) {
+    handleCorrect(btn) {
         R.markButton(btn, 'correct');
-        showFeedback(true, null, speedTier);
+        showFeedback(true);
         playAttackEffect();
 
         const pet = this.store.get('pet');

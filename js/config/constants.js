@@ -1,7 +1,7 @@
 /**
  * 游戏常量配置
  */
-export const VERSION = '0.39.2';
+export const VERSION = '0.39.1';
 
 // 游戏状态
 export const GameState = Object.freeze({
