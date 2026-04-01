@@ -421,10 +421,7 @@ main {
 }
 
 .answer-btn {
-    min-width: 80px;
-    width: auto;
-    padding-left: 12px;
-    padding-right: 12px;
+    width: 80px;
     height: 64px;
     font-size: 2rem;
     font-weight: bold;
@@ -621,68 +618,8 @@ main {
 #pet-selection h2 {
     color: white;
     font-size: 1.6rem;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* ===== 难度模式选择器 ===== */
-.mode-selector {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
-.mode-label {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.95rem;
-    font-weight: bold;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
-
-.mode-options {
-    display: flex;
-    gap: 8px;
-}
-
-.mode-option {
-    padding: 6px 16px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 20px;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
-    transition: all 0.2s ease;
-}
-
-.mode-option:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.7);
-}
-
-.mode-option.selected {
-    background: linear-gradient(145deg, #ffeaa7, #fdcb6e);
-    color: #2d3436;
-    border-color: #ffeaa7;
-    box-shadow: 0 2px 8px rgba(253, 203, 110, 0.4);
-}
-
-/* ===== Header 模式标签 ===== */
-.mode-display {
-    font-size: 0.75rem;
-    color: #6c5ce7;
-    font-weight: bold;
-    padding: 2px 10px;
-    background: linear-gradient(135deg, #f0e6ff 0%, #e0d0ff 100%);
-    border-radius: 12px;
-    white-space: nowrap;
-}
-
-.mode-display.hidden {
-    display: none;
 }
 
 .pet-options {
@@ -1111,8 +1048,7 @@ main {
     }
 
     .answer-btn {
-        min-width: 64px;
-        width: auto;
+        width: 64px;
         height: 52px;
         font-size: 1.6rem;
         border-radius: 10px;
@@ -1146,26 +1082,7 @@ main {
     /* 选择宠物 - 横向紧凑 */
     #pet-selection h2 {
         font-size: 1.2rem;
-        margin-bottom: 6px;
-    }
-
-    .mode-selector {
-        margin-bottom: 8px;
-        gap: 6px;
-    }
-
-    .mode-label {
-        font-size: 0.8rem;
-    }
-
-    .mode-option {
-        padding: 4px 10px;
-        font-size: 0.75rem;
-    }
-
-    .mode-display {
-        font-size: 0.65rem;
-        padding: 1px 8px;
+        margin-bottom: 10px;
     }
 
     .pet-options {
@@ -1315,8 +1232,7 @@ main {
     }
 
     .answer-btn {
-        min-width: 52px;
-        width: auto;
+        width: 52px;
         height: 42px;
         font-size: 1.3rem;
     }
@@ -1379,8 +1295,7 @@ main {
     }
 
     .answer-btn {
-        min-width: 100px;
-        width: auto;
+        width: 100px;
         height: 80px;
         font-size: 2.4rem;
     }
@@ -1413,8 +1328,7 @@ main {
     }
 
     .answer-btn {
-        min-width: 90px;
-        width: auto;
+        width: 90px;
         height: 72px;
         font-size: 2rem;
     }

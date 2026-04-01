@@ -40,7 +40,6 @@ export class SaveManager {
                 hp: pet.hp, maxHP: pet.maxHP,
                 attack: pet.attack, evolved: pet.evolved, potions: pet.potions
             },
-            mathMode: store.get('mathMode'),
             progress: {
                 level: store.get('level'),
                 subLevel: store.get('subLevel'),
@@ -86,8 +85,7 @@ export class GameStore {
             level: 1,
             subLevel: 1,
             monstersDefeated: 0,
-            encounterType: null,  // 'trainer' | 'gymLeader' | 'eliteFour' | 'champion'
-            mathMode: 10          // 10 | 20 | 50 | 100
+            encounterType: null  // 'trainer' | 'gymLeader' | 'eliteFour' | 'champion'
         };
     }
 

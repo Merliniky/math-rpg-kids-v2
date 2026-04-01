@@ -1,15 +1,7 @@
 /**
  * 游戏常量配置
  */
-export const VERSION = '0.42.0';
-
-// 数学模式
-export const MATH_MODES = Object.freeze({
-    10:  { label: '10以内', max: 10 },
-    20:  { label: '20以内', max: 20 },
-    50:  { label: '50以内', max: 50 },
-    100: { label: '100以内', max: 100 }
-});
+export const VERSION = '0.40.0';
 
 // 游戏状态
 export const GameState = Object.freeze({
@@ -100,29 +92,38 @@ export const BOSS_DIFFICULTY_WEIGHTS = Object.freeze({
 });
 
 /**
- * 难度范围配置（按模式分组）
+ * 难度范围配置
  *
- * 每个模式有3个难度等级：1=简单, 2=中等, 3=困难
+ * 简单: 加法和≤8，可选简单减法（被减数≤6），操作数≥1
+ * 中等: 加法和≤10，减法被减数≤9，操作数≥2（避免+1/-1）
+ * 困难: 加法和≤10 且操作数≥2，减法被减数≤10 且操作数≥2
  */
-export const MODE_DIFFICULTY_RANGES = Object.freeze({
-    10: {
-        1: { minAddend: 1, maxAddition: 8,  hasSubtraction: true, subChance: 0.2,  minMinuend: 3,  maxMinuend: 6,   minSubtrahend: 1 },
-        2: { minAddend: 2, maxAddition: 10, hasSubtraction: true, subChance: 0.45, minMinuend: 5,  maxMinuend: 9,   minSubtrahend: 2 },
-        3: { minAddend: 2, maxAddition: 10, hasSubtraction: true, subChance: 0.55, minMinuend: 6,  maxMinuend: 10,  minSubtrahend: 2 }
+export const DIFFICULTY_RANGES = Object.freeze({
+    1: {
+        minAddend: 1,
+        maxAddition: 8,
+        hasSubtraction: true,
+        subChance: 0.2,
+        minMinuend: 3,
+        maxMinuend: 6,
+        minSubtrahend: 1
     },
-    20: {
-        1: { minAddend: 1, maxAddition: 14, hasSubtraction: true, subChance: 0.25, minMinuend: 5,  maxMinuend: 12,  minSubtrahend: 1 },
-        2: { minAddend: 2, maxAddition: 18, hasSubtraction: true, subChance: 0.45, minMinuend: 8,  maxMinuend: 16,  minSubtrahend: 2 },
-        3: { minAddend: 3, maxAddition: 20, hasSubtraction: true, subChance: 0.55, minMinuend: 10, maxMinuend: 20,  minSubtrahend: 3 }
+    2: {
+        minAddend: 2,
+        maxAddition: 10,
+        hasSubtraction: true,
+        subChance: 0.45,
+        minMinuend: 5,
+        maxMinuend: 9,
+        minSubtrahend: 2
     },
-    50: {
-        1: { minAddend: 2, maxAddition: 30, hasSubtraction: true, subChance: 0.3,  minMinuend: 10, maxMinuend: 25,  minSubtrahend: 2 },
-        2: { minAddend: 5, maxAddition: 40, hasSubtraction: true, subChance: 0.45, minMinuend: 15, maxMinuend: 40,  minSubtrahend: 5 },
-        3: { minAddend: 5, maxAddition: 50, hasSubtraction: true, subChance: 0.55, minMinuend: 20, maxMinuend: 50,  minSubtrahend: 5 }
-    },
-    100: {
-        1: { minAddend: 5,  maxAddition: 60,  hasSubtraction: true, subChance: 0.3,  minMinuend: 20, maxMinuend: 50,  minSubtrahend: 5 },
-        2: { minAddend: 10, maxAddition: 80,  hasSubtraction: true, subChance: 0.45, minMinuend: 30, maxMinuend: 80,  minSubtrahend: 10 },
-        3: { minAddend: 10, maxAddition: 100, hasSubtraction: true, subChance: 0.55, minMinuend: 40, maxMinuend: 100, minSubtrahend: 10 }
+    3: {
+        minAddend: 2,
+        maxAddition: 10,
+        hasSubtraction: true,
+        subChance: 0.55,
+        minMinuend: 6,
+        maxMinuend: 10,
+        minSubtrahend: 2
     }
 });

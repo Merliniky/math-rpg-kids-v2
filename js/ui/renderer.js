@@ -61,8 +61,6 @@ export function cacheElements() {
         saveInfoText: document.getElementById('save-info-text'),
         continueSaveBtn: document.getElementById('continue-save-btn'),
         newGameBtn: document.getElementById('new-game-btn'),
-        modeOptions: document.querySelectorAll('.mode-option'),
-        modeDisplay: document.getElementById('mode-display'),
         petName: document.getElementById('pet-name'),
         petLevelDisplay: document.getElementById('pet-level-display'),
         petXP: document.getElementById('pet-xp'),
@@ -220,20 +218,12 @@ export function renderSaveInfo(el, saveData) {
     } else {
         location = GymData[level - 1]?.name || `第${level}关`;
     }
-    const modeLabel = saveData.mathMode ? `${saveData.mathMode}以内` : '10以内';
-    el.saveInfoText.textContent = `存档: Lv.${pet.level} ${pet.name} - ${location} (${level}-${subLevel}) [${modeLabel}]`;
+    el.saveInfoText.textContent = `存档: Lv.${pet.level} ${pet.name} - ${location} (${level}-${subLevel})`;
     show(el.saveInfo);
 }
 
 export function hideSaveInfo(el) {
     hide(el.saveInfo);
-}
-
-// ---- Mode Display ----
-
-export function renderModeDisplay(mathMode) {
-    el.modeDisplay.textContent = `${mathMode}以内`;
-    show(el.modeDisplay);
 }
 
 // ---- Visibility ----

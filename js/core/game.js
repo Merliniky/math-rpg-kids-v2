@@ -38,7 +38,6 @@ export class Game {
         const saveData = SaveManager.load();
         if (!saveData) return;
         this.store.set('pet', { ...saveData.pet });
-        this.store.set('mathMode', saveData.mathMode || 10);
         this.store.update({
             level: saveData.progress.level,
             subLevel: saveData.progress.subLevel,
@@ -48,7 +47,6 @@ export class Game {
         this.store.set('gameState', GameState.EXPLORING);
         R.renderPet(this.store.get('pet'));
         R.renderLevelDisplay(this.store.get('level'), this.store.get('subLevel'));
-        R.renderModeDisplay(this.store.get('mathMode'));
         R.renderExploreHint(this.store.get('level'), this.store.get('subLevel'));
         R.show(this.el.exploreHint);
     }
@@ -67,13 +65,6 @@ export class Game {
         this.el.closeStatsBtn.addEventListener('click', () => this.hideStats());
         this.el.continueSaveBtn.addEventListener('click', () => this.loadSave());
         this.el.newGameBtn.addEventListener('click', () => this.newGame());
-
-        this.el.modeOptions.forEach(opt => {
-            opt.addEventListener('click', e => {
-                this.el.modeOptions.forEach(o => o.classList.remove('selected'));
-                e.currentTarget.classList.add('selected');
-            });
-        });
 
         this.el.petOptions.forEach(opt => {
             opt.addEventListener('click', e => {
@@ -96,18 +87,13 @@ export class Game {
             return;
         }
 
-        const modeBtn = document.querySelector('.mode-option.selected');
-        const mathMode = modeBtn ? parseInt(modeBtn.dataset.mode) : 10;
-        this.store.set('mathMode', mathMode);
-
         const pet = createPet(selected.dataset.pet);
         this.store.set('pet', pet);
         R.hide(this.el.petSelection);
         this.store.set('gameState', GameState.EXPLORING);
         R.renderPet(pet);
         R.renderLevelDisplay(this.store.get('level'), this.store.get('subLevel'));
-        R.renderModeDisplay(mathMode);
-        this.showMessage(`欢迎来到数理小精灵的世界！你选择了${pet.name}！\n模式：${mathMode}以内加减法`);
+        this.showMessage(`欢迎来到数理小精灵的世界！你选择了${pet.name}！`);
     }
 
     // ---- Exploration ----
@@ -151,8 +137,7 @@ export class Game {
         const level = this.store.get('level');
         const subLevel = this.store.get('subLevel');
         const encounterType = this.store.get('encounterType');
-        const mathMode = this.store.get('mathMode');
-        const q = generateQuestion(level, subLevel, encounterType, mathMode);
+        const q = generateQuestion(level, subLevel, encounterType);
         this.store.set('question', q);
         R.renderQuestion(q);
         this.store.set('battlePhase', BattlePhase.WAITING_ANSWER);
