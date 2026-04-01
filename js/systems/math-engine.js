@@ -1,16 +1,17 @@
 /**
- * 数学题引擎 — 10以内加减法
+ * 数学题引擎 — 支持多种数值范围模式
  *
  * 设计目标：
  * - 每场战斗简单题和难题交替出现
  * - 避免大量出现 +1/-1 类过于简单的题目
  * - boss战（道馆馆主、四大天王、冠军）显著更难
  * - 高关卡减法题比例增加
+ * - 支持10/20/50/100以内加减法模式
  */
 import {
     DIFFICULTY_WEIGHTS,
     BOSS_DIFFICULTY_WEIGHTS,
-    DIFFICULTY_RANGES
+    MODE_DIFFICULTY_RANGES
 } from '../config/constants.js';
 
 function randInt(min, max) {
@@ -72,23 +73,23 @@ function isDuplicate(q) {
 }
 
 /**
- * 生成干扰选项
+ * 生成干扰选项（根据答案范围自适应）
  */
-function makeOptions(correct) {
+function makeOptions(correct, maxValue) {
     const opts = [correct];
+    const maxOffset = maxValue <= 10 ? 4 : maxValue <= 20 ? 6 : maxValue <= 50 ? 10 : 15;
     let attempts = 0;
     while (opts.length < 3 && attempts < 30) {
-        // 干扰项偏移1-4，比之前更大范围
-        const offset = randInt(1, 4);
+        const offset = randInt(1, maxOffset);
         const wrong = Math.random() < 0.5 ? correct + offset : correct - offset;
-        if (wrong >= 0 && wrong <= 12 && !opts.includes(wrong)) {
+        if (wrong >= 0 && wrong <= maxValue + 5 && !opts.includes(wrong)) {
             opts.push(wrong);
         }
         attempts++;
     }
     // 保底填充
     while (opts.length < 3) {
-        const filler = randInt(0, 10);
+        const filler = randInt(0, maxValue);
         if (!opts.includes(filler)) opts.push(filler);
     }
     return shuffle(opts);
@@ -98,10 +99,11 @@ function makeOptions(correct) {
  * 生成一道题目
  * @param {number} level     - 大关卡 1-9
  * @param {number} subLevel  - 子关卡 1-5
- * @param {string} [encounterType] - 遭遇类型：'normal','gymLeader','eliteFour','champion'
+ * @param {string} [encounterType] - 遭遇类型
+ * @param {number} [mathMode=10] - 数学模式：10/20/50/100
  * @returns {{ display: string, answer: number, options: number[] }}
  */
-export function generateQuestion(level, subLevel, encounterType) {
+export function generateQuestion(level, subLevel, encounterType, mathMode = 10) {
     // 根据遭遇类型选择权重表
     const isBoss = encounterType === 'gymLeader'
         || encounterType === 'eliteFour'
@@ -118,7 +120,8 @@ export function generateQuestion(level, subLevel, encounterType) {
     else if (rand < weights[0] + weights[1]) selectedDiff = 2;
     else selectedDiff = 3;
 
-    const range = DIFFICULTY_RANGES[selectedDiff];
+    const modeRanges = MODE_DIFFICULTY_RANGES[mathMode] || MODE_DIFFICULTY_RANGES[10];
+    const range = modeRanges[selectedDiff];
 
     // 生成题目，避免重复
     let q = null;
@@ -138,7 +141,7 @@ export function generateQuestion(level, subLevel, encounterType) {
         recentQuestions.shift();
     }
 
-    q.options = makeOptions(q.answer);
+    q.options = makeOptions(q.answer, mathMode);
     return q;
 }
 
