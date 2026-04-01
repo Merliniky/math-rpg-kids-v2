@@ -3,7 +3,7 @@
  */
 import { GameState, BattlePhase, BATTLE_REWARDS } from '../config/constants.js';
 import { GymData, EliteFourData } from '../config/pokemon-data.js';
-import { EventBus, GameStore } from './state.js';
+import { EventBus, GameStore, SaveManager } from './state.js';
 import { createPet, addXP, usePotion as usePotionSystem, recoverFromDefeat } from '../systems/pet.js';
 import { createEncounter, dealDamage } from '../systems/battle.js';
 import { generateQuestion, resetQuestionHistory } from '../systems/math-engine.js';
@@ -25,7 +25,35 @@ export class Game {
 
     start() {
         this.store.set('gameState', GameState.PET_SELECTION);
+        const saveData = SaveManager.load();
+        if (saveData) {
+            R.renderSaveInfo(this.el, saveData);
+        } else {
+            R.hideSaveInfo(this.el);
+        }
         R.show(this.el.petSelection);
+    }
+
+    loadSave() {
+        const saveData = SaveManager.load();
+        if (!saveData) return;
+        this.store.set('pet', { ...saveData.pet });
+        this.store.update({
+            level: saveData.progress.level,
+            subLevel: saveData.progress.subLevel,
+            monstersDefeated: saveData.progress.monstersDefeated
+        });
+        R.hide(this.el.petSelection);
+        this.store.set('gameState', GameState.EXPLORING);
+        R.renderPet(this.store.get('pet'));
+        R.renderLevelDisplay(this.store.get('level'), this.store.get('subLevel'));
+        R.renderExploreHint(this.store.get('level'), this.store.get('subLevel'));
+        R.show(this.el.exploreHint);
+    }
+
+    newGame() {
+        SaveManager.delete();
+        R.hideSaveInfo(this.el);
     }
 
     bindEvents() {
@@ -35,6 +63,8 @@ export class Game {
         this.el.messageOkBtn.addEventListener('click', () => this.hideMessage());
         this.el.confirmPetBtn.addEventListener('click', () => this.confirmPet());
         this.el.closeStatsBtn.addEventListener('click', () => this.hideStats());
+        this.el.continueSaveBtn.addEventListener('click', () => this.loadSave());
+        this.el.newGameBtn.addEventListener('click', () => this.newGame());
 
         this.el.petOptions.forEach(opt => {
             opt.addEventListener('click', e => {
@@ -267,6 +297,7 @@ export class Game {
         R.show(this.el.exploreHint);
         R.renderLevelDisplay(this.store.get('level'), this.store.get('subLevel'));
         R.renderExploreHint(this.store.get('level'), this.store.get('subLevel'));
+        SaveManager.save(this.store);
     }
 
     playerDefeated() {
@@ -281,6 +312,7 @@ export class Game {
 
     gameComplete() {
         this.store.set('gameState', GameState.GAME_OVER);
+        SaveManager.delete();
         R.renderGameComplete();
     }
 

@@ -57,6 +57,10 @@ export function cacheElements() {
         confirmPetBtn: document.getElementById('confirm-pet-btn'),
         statsPanel: document.getElementById('stats-panel'),
         closeStatsBtn: document.getElementById('close-stats-btn'),
+        saveInfo: document.getElementById('save-info'),
+        saveInfoText: document.getElementById('save-info-text'),
+        continueSaveBtn: document.getElementById('continue-save-btn'),
+        newGameBtn: document.getElementById('new-game-btn'),
         petName: document.getElementById('pet-name'),
         petLevelDisplay: document.getElementById('pet-level-display'),
         petXP: document.getElementById('pet-xp'),
@@ -201,6 +205,25 @@ export function renderStats(pet, level, subLevel, monstersDefeated) {
     el.petAttack.textContent = pet.attack;
     el.currentLevel.textContent = `${level}-${subLevel}`;
     el.monstersDefeatedDisplay.textContent = monstersDefeated;
+}
+
+// ---- Save Info ----
+
+export function renderSaveInfo(el, saveData) {
+    const pet = saveData.pet;
+    const { level, subLevel } = saveData.progress;
+    let location = '';
+    if (level === 9) {
+        location = subLevel === 5 ? '冠军之路' : '四大天王';
+    } else {
+        location = GymData[level - 1]?.name || `第${level}关`;
+    }
+    el.saveInfoText.textContent = `存档: Lv.${pet.level} ${pet.name} - ${location} (${level}-${subLevel})`;
+    show(el.saveInfo);
+}
+
+export function hideSaveInfo(el) {
+    hide(el.saveInfo);
 }
 
 // ---- Visibility ----

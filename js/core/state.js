@@ -22,6 +22,55 @@ export class EventBus {
 }
 
 /**
+ * 存档管理器
+ */
+const SAVE_KEY = 'math-rpg-kids-v2-save';
+const SAVE_VERSION = 1;
+
+export class SaveManager {
+    static save(store) {
+        const pet = store.get('pet');
+        if (!pet) return;
+        const data = {
+            version: SAVE_VERSION,
+            timestamp: Date.now(),
+            pet: {
+                type: pet.type, name: pet.name, level: pet.level,
+                xp: pet.xp, xpToNext: pet.xpToNext,
+                hp: pet.hp, maxHP: pet.maxHP,
+                attack: pet.attack, evolved: pet.evolved, potions: pet.potions
+            },
+            progress: {
+                level: store.get('level'),
+                subLevel: store.get('subLevel'),
+                monstersDefeated: store.get('monstersDefeated')
+            }
+        };
+        try {
+            localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+        } catch (e) { /* storage full or unavailable */ }
+    }
+
+    static load() {
+        try {
+            const raw = localStorage.getItem(SAVE_KEY);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (!data || !data.pet || !data.progress) return null;
+            return data;
+        } catch (e) { return null; }
+    }
+
+    static delete() {
+        try { localStorage.removeItem(SAVE_KEY); } catch (e) { /* */ }
+    }
+
+    static hasSave() {
+        return this.load() !== null;
+    }
+}
+
+/**
  * 游戏状态存储
  */
 export class GameStore {

@@ -690,6 +690,70 @@ main {
     border: 3px solid #00b894;
 }
 
+/* ===== 存档信息 ===== */
+.save-info {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    border: 2px solid rgba(255, 234, 167, 0.5);
+}
+
+.save-info.hidden {
+    display: none;
+}
+
+.save-info p {
+    color: #ffeaa7;
+    font-size: 0.95rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.save-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+#continue-save-btn {
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #55efc4, #00b894);
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+}
+
+#continue-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 184, 148, 0.4);
+}
+
+#new-game-btn {
+    padding: 10px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #fd79a8, #e84393);
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(232, 67, 147, 0.3);
+}
+
+#new-game-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(232, 67, 147, 0.4);
+}
+
 #confirm-pet-btn {
     padding: 12px 36px;
     font-size: 1.1rem;
@@ -1049,6 +1113,21 @@ main {
     #confirm-pet-btn {
         padding: 8px 28px;
         font-size: 0.95rem;
+    }
+
+    .save-info {
+        padding: 8px 14px;
+        margin-bottom: 10px;
+    }
+
+    .save-info p {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+
+    #continue-save-btn, #new-game-btn {
+        padding: 7px 18px;
+        font-size: 0.85rem;
     }
 
     /* 消息弹窗 */
